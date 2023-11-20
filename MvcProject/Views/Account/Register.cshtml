@@ -1,0 +1,33 @@
+﻿@model MvcProject.DTO.RegisterRequest
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="text-center">
+    <h1>Hasta Kayıt</h1>
+
+    <form asp-controller="Account" asp-action="Register" method="POST">
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" type="email" class="form-control" required />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            <input asp-for="Password" type="password" class="form-control" required />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Register" class="btn btn-primary" />
+        </div>
+    </form>
+
+    <div>
+        <a asp-controller="Account" asp-action="Login">Giriş Yap</a>
+    </div>
+</div>
