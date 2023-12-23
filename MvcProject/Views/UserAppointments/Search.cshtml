@@ -1,0 +1,94 @@
+﻿@using System.Security.Claims;
+@model List<MvcProject.DTO.AppointmentDateDTO>
+
+@{
+	ViewData["Title"] = "Randevu Al";
+}
+
+<style>
+	optgroup::before {
+		display: none;
+	}
+</style>
+
+<h1>Mevcut Randevular</h1>
+
+@if (Model.Count.Equals(0))
+{
+	<h3>No available appointment for selected date range.</h3>
+}
+else
+{
+	<br />
+	<h3>@Model.FirstOrDefault()?.Major - @Model.FirstOrDefault()?.Policlinic</h3>
+	<p>
+		<br />
+		@foreach (var date in Model)
+		{
+			string dataId = date.Date.Year.ToString() + date.Date.Month.ToString() + date.Date.Day.ToString();
+
+			<button class="btn btn-primary" data-toggle="collapse" data-target="#@dataId" aria-expanded="false" aria-controls="@dataId">
+				@date.Date
+			</button>
+		}
+	</p>
+
+	<div id="collapseParent">
+		@foreach (var date in Model)
+		{
+			string dataId = date.Date.Year.ToString() + date.Date.Month.ToString() + date.Date.Day.ToString();
+
+			<div class="collapse" id="@dataId" data-parent="#collapseParent">
+				<form asp-action="Create">
+					<input name="UserId" hidden type="text" value="@Context.User.FindFirst(ClaimTypes.NameIdentifier).Value" />
+					<input name="strDate" hidden type="date" value="@date.Date.ToString("yyyy-MM-dd")" />
+					<div class="form-group">
+						<label for="DoctorId" class="control-label">Doktor:</label>
+						<select required name="DoctorId" class="form-control doctorSelect" asp-items="date.Doctors?.Select(e => new SelectListItem { Value = e.Id.ToString(), Text = e.Name })">
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="AppointmentTimeId" class="control-label">Randevu Saati:</label>
+						<select required name="AppointmentTimeId" multiple class="form-control appointmentTimes" asp-items="date.Doctors?.SelectMany(doctor => {
+var group = new SelectListGroup { Name = doctor.Id.ToString() };
+var items = doctor.Times.Select(time => new SelectListItem { Value = time.Id.ToString(), Text = time.Time, Group = group });
+return items;
+})">
+						</select>
+					</div>
+					<div class="form-group">
+						<input type="submit" value="Randevu Al" class="btn btn-success" />
+					</div>
+				</form>
+			</div>
+		}
+	</div>
+
+	<a asp-action="Index">Listeye Geri Dön</a>
+
+	<script>
+		Array.from(document.querySelectorAll("select.doctorSelect")).forEach(element => {
+			element.addEventListener('change', selectDoctor);
+		});
+
+		function selectDoctor(elm) {
+			const element = elm.target == null ? elm : elm.target;
+			console.log(element);
+
+			const groups = element.parentElement.parentElement.querySelectorAll("select.appointmentTimes optgroup");
+			console.log(groups);
+			groups.forEach(e => {
+				e.parentElement.value = "";
+				if (e.getAttribute("label") == element.value) {
+					e.style.display = "unset";
+				} else {
+					e.style.display = "none";
+				}
+			});
+		}
+
+		window.addEventListener('load', _ => {
+			Array.from(document.querySelectorAll("select.doctorSelect")).forEach(element => selectDoctor(element));
+		});
+	</script>
+}

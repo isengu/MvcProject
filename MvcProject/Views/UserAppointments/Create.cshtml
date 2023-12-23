@@ -1,0 +1,73 @@
+﻿@model MvcProject.DTO.LoadAppointmentsDTO
+
+@{
+	ViewData["Title"] = "Randevu Ara";
+}
+
+<style>
+	optgroup::before {
+		display: none;
+	}
+</style>
+
+<h1>Randevu Ara</h1>
+
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Search">
+			<div class="form-group">
+				<label for="Major" class="control-label">Ana Bilim Dalı</label>
+				<select name="Major" class="form-control majorSelect" asp-items="ViewBag.MajorId"></select>
+			</div>
+			<div class="form-group">
+				<label asp-for="PoliclinicId" class="control-label">Poliklinik</label>
+				<select multiple asp-for="PoliclinicId" class="form-control policlinics" asp-items="ViewBag.PoliclinicId" required></select>
+				<span asp-validation-for="PoliclinicId" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="strStartDate" class="control-label">Başlangıç Tarihi</label>
+				<input type="date" asp-for="strStartDate" class="form-control" required />
+				<span asp-validation-for="strStartDate" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="strEndDate" class="control-label">Bitiş Tarihi</label>
+				<input type="date" asp-for="strEndDate" class="form-control" required />
+				<span asp-validation-for="strEndDate" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Ara" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Index">Listeye Geri Dön</a>
+</div>
+
+<script>
+	Array.from(document.querySelectorAll("select.majorSelect")).forEach(element => {
+		element.addEventListener('change', selectDoctor);
+	});
+
+	function selectDoctor(elm) {
+		const element = elm.target == null ? elm : elm.target;
+		console.log(element);
+
+		const groups = element.parentElement.parentElement.querySelectorAll("select.policlinics optgroup");
+		console.log(groups);
+		groups.forEach(e => {
+			e.parentElement.value = "";
+			if (e.getAttribute("label") == element.value) {
+				e.style.display = "unset";
+			} else {
+				e.style.display = "none";
+			}
+		});
+	}
+
+	window.addEventListener('load', _ => {
+		Array.from(document.querySelectorAll("select.majorSelect")).forEach(element => selectDoctor(element));
+	});
+</script>

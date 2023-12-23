@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MvcProject.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Appointment";
+}
+
+<h1>Randevularım</h1>
+<br />
+<p>
+    <a class="btn btn-primary" asp-action="Create">Randevu Al</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tarih
+            </th>
+            <th>
+                Saat
+            </th>
+            <th>
+                Doktor
+            </th>
+            <th>
+                Ana Bilim Dalı
+            </th>
+            <th>
+                Poliklinik
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Date
+                </td>
+                <td>
+                    @item.AppointmentTime.ToString()
+                </td>
+                <td>
+                    @item.Doctor.Name
+                </td>
+                <td>
+                    @item.Doctor.Policlinic.Major.Name
+                </td>
+                <td>
+                    @item.Doctor.Policlinic.Name
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Detaylar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

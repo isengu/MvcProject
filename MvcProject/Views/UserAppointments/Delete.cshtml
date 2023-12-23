@@ -1,0 +1,51 @@
+﻿@model MvcProject.Models.Appointment
+
+@{
+    ViewData["Title"] = "Sil";
+}
+
+<h1>Sil</h1>
+
+<h3>Bu randevuyu iptal etmek istediğinize emin misiniz?</h3>
+<div>
+    <h4>Appointment</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Tarih
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Date
+        </dd>
+        <dt class = "col-sm-2">
+            Saat
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.AppointmentTime
+        </dd>
+        <dt class="col-sm-2">
+            Ana Bilim Dalı
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Doctor.Policlinic.Major.Name
+        </dd>
+        <dt class="col-sm-2">
+            Poliklinik
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Doctor.Policlinic.Name
+        </dd>
+        <dt class = "col-sm-2">
+            Doktor
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Doctor.Name
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Sil" class="btn btn-danger" /> |
+        <a asp-action="Index">Listeye Geri Dön</a>
+    </form>
+</div>
